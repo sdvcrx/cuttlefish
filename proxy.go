@@ -3,10 +3,11 @@ package main
 import (
 	"log"
 	"io"
-	"github.com/pkg/errors"
+	"fmt"
 	"time"
 	"net"
 	"net/http"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -88,13 +89,15 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func main() {
-	server := http.Server{
-		Addr: ":8080",
+func NewProxyServerFromPort(port int) http.Server {
+	addr := fmt.Sprintf(":%d", port)
+	return http.Server{
+		Addr: addr,
 		Handler: http.HandlerFunc(ProxyHandler),
 	}
-	log.Printf("Proxy server is listening on %s", server.Addr)
-	if err := server.ListenAndServe(); err != nil {
-		log.Fatalln(errors.Wrap(err, "server.ListenAndServe"))
-	}
+}
+
+func NewProxyServer() http.Server {
+	port := viper.GetInt("port")
+	return NewProxyServerFromPort(port)
 }

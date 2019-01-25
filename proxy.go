@@ -72,7 +72,7 @@ func connectTunnelHandler(w http.ResponseWriter, r *http.Request) {
 
 func httpHandler(w http.ResponseWriter, r *http.Request) {
 	filterProxyHeaders(r.Header)
-	proxy_resp, err := http.DefaultTransport.RoundTrip(r)
+	proxy_resp, err := DefaultProxyTransport.RoundTrip(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return

@@ -34,7 +34,7 @@ func LoadFromFile(fileName string) {
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Println("config not found, using default config and args")
+		log.Println("config file not found, using default config and args")
 	}
 }
 

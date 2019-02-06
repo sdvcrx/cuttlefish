@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/pkg/errors"
 	"github.com/spf13/viper"
 	"github.com/spf13/pflag"
+	"log"
 	"strings"
 )
 
@@ -34,7 +34,7 @@ func LoadFromFile(fileName string) {
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
-		panic(errors.Wrap(err, "config.Load"))
+		log.Println("config not found, using default config and args")
 	}
 }
 

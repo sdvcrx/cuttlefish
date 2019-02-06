@@ -9,7 +9,7 @@ import (
 	"strings"
 	"net/http"
 	"spx/utils"
-	"github.com/spf13/viper"
+	"spx/config"
 )
 
 var proxyCredentials string
@@ -125,9 +125,10 @@ func NewProxyServerFromPort(port int) http.Server {
 }
 
 func NewProxyServer() http.Server {
-	port := viper.GetInt("port")
-	proxyUser := viper.GetString("username")
-	proxyPassword := viper.GetString("password")
+	appConfig := config.GetInstance()
+	proxyUser := appConfig.AuthUser
+	proxyPassword := appConfig.AuthPassword
+
 	if proxyUser != "" && proxyPassword != "" {
 		proxyCredentials = fmt.Sprintf("%s:%s", proxyUser, proxyPassword)
 	}
@@ -135,5 +136,5 @@ func NewProxyServer() http.Server {
 		proxyCredentialsBase64 = utils.Base64Encode(proxyCredentials)
 	}
 
-	return NewProxyServerFromPort(port)
+	return NewProxyServerFromPort(appConfig.Port)
 }

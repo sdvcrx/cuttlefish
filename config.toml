@@ -1,3 +1,4 @@
+[common]
 port = 8080
 username = ''
 password = ''

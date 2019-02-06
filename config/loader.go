@@ -9,7 +9,19 @@ import (
 
 var (
 	configType = "toml"
+	config *AppConfig
 )
+
+type AppConfig struct {
+	Port int
+	AuthUser string
+	AuthPassword string
+	ParentProxies []string
+}
+
+func GetInstance() *AppConfig {
+	return config
+}
 
 func LoadFromString(config string) {
 	viper.SetConfigType(configType)
@@ -28,6 +40,11 @@ func LoadFromFile(fileName string) {
 
 func Load() {
 	LoadFromFile("config")
+	config = &AppConfig{
+		Port: viper.GetInt("common.port"),
+		AuthUser: viper.GetString("common.username"),
+		AuthPassword: viper.GetString("common.password"),
+	}
 }
 
 func init() {

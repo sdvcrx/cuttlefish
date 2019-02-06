@@ -58,8 +58,11 @@ func Load() {
 }
 
 func init() {
-	pflag.Int("port", 8080, "Proxy server port")
+	// Bind pflag
+	pflag.IntP("port", "p", 8080, "Proxy server port")
 	pflag.Parse()
-
 	viper.BindPFlags(pflag.CommandLine)
+
+	// Register alias
+	viper.RegisterAlias("common.port", "port")
 }

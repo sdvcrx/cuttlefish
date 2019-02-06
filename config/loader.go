@@ -40,6 +40,15 @@ func LoadFromFile(fileName string) {
 
 func Load() {
 	LoadFromFile("config")
+
+	proxies := viper.GetStringSlice("proxy.parent_proxies")
+	// Add http:// prefix
+	for idx, rule := range proxies {
+		if strings.HasPrefix(rule, "http") == false {
+			proxies[idx] = "http://" + rule
+		}
+	}
+
 	config = &AppConfig{
 		Port: viper.GetInt("common.port"),
 		AuthUser: viper.GetString("common.username"),

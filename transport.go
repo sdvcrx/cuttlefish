@@ -1,16 +1,13 @@
 package main
 
 import (
+	"log"
 	"time"
 	"net"
 	"net/url"
 	"net/http"
+	"spx/config"
 )
-
-func selectProxy(r *http.Request) (*url.URL, error) {
-	// return url.Parse("http://127.0.0.1:7890")
-	return nil, nil
-}
 
 var DefaultProxyTransport = &http.Transport{
 	Proxy: selectProxy,
@@ -25,4 +22,13 @@ var DefaultProxyTransport = &http.Transport{
 	IdleConnTimeout:       90 * time.Second,
 	TLSHandshakeTimeout:   10 * time.Second,
 	ExpectContinueTimeout: 1 * time.Second,
+}
+
+func selectProxy(r *http.Request) (*url.URL, error) {
+	proxy := config.GetInstance().ParentProxies.Next()
+	if proxy != "" {
+		log.Printf("select proxy: %s", proxy)
+		// return url.Parse(proxy)
+	}
+	return nil, nil
 }

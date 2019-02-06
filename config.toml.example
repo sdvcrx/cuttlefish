@@ -2,3 +2,6 @@
 port = 8080
 username = ''
 password = ''
+
+[proxy]
+parent_proxies = []

@@ -16,7 +16,7 @@ type AppConfig struct {
 	Port int
 	AuthUser string
 	AuthPassword string
-	ParentProxies []string
+	ParentProxies Iterator
 }
 
 func GetInstance() *AppConfig {
@@ -44,6 +44,7 @@ func Load() {
 		Port: viper.GetInt("common.port"),
 		AuthUser: viper.GetString("common.username"),
 		AuthPassword: viper.GetString("common.password"),
+		ParentProxies: NewProxyIterator(proxies),
 	}
 }
 

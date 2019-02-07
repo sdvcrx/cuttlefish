@@ -6,14 +6,10 @@ import (
 	"fmt"
 	"time"
 	"net"
-	"strings"
 	"net/http"
-	"spx/utils"
 	"spx/config"
 )
 
-var proxyCredentials string
-var proxyCredentialsBase64 string
 
 var (
 	FILTER_HEADERS = []string{
@@ -84,27 +80,6 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, proxy_resp.Body)
 }
 
-func ProxyAuthenticateHandler(handle http.HandlerFunc) http.Handler {
-	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
-		if len(proxyCredentials) == 0 {
-			handle(w, r)
-			return
-		}
-
-		// Need authorization
-		credientials := strings.TrimPrefix(r.Header.Get("Proxy-Authorization"), "Basic ")
-		log.Println(credientials)
-		log.Println(proxyCredentials)
-		if credientials == "" || (credientials != proxyCredentials && credientials != proxyCredentialsBase64){
-			w.Header().Set("Proxy-Authenticate", "Basic realm=\"Password\"")
-			http.Error(w, "", http.StatusProxyAuthRequired)
-			log.Println("Accessing proxy deny, password is wrong or empty")
-			return
-		}
-		handle(w, r)
-	})
-}
-
 func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodConnect {
 		log.Printf("%s %s", r.Method, r.Host)
@@ -115,26 +90,16 @@ func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewProxyServerFromPort(port int) http.Server {
-	addr := fmt.Sprintf(":%d", port)
-	proxyHandler := ProxyAuthenticateHandler(ProxyHandler)
+func NewProxyServer() http.Server {
+	appConfig := config.GetInstance()
+	authUser := appConfig.AuthUser
+	authPassword := appConfig.AuthPassword
+
+
+	addr := fmt.Sprintf(":%d", appConfig.Port)
+	proxyHandler := ProxyAuthenticateHandler(ProxyHandler, authUser, authPassword)
 	return http.Server{
 		Addr: addr,
 		Handler: proxyHandler,
 	}
-}
-
-func NewProxyServer() http.Server {
-	appConfig := config.GetInstance()
-	proxyUser := appConfig.AuthUser
-	proxyPassword := appConfig.AuthPassword
-
-	if proxyUser != "" && proxyPassword != "" {
-		proxyCredentials = fmt.Sprintf("%s:%s", proxyUser, proxyPassword)
-	}
-	if len(proxyCredentials) > 0 {
-		proxyCredentialsBase64 = utils.Base64Encode(proxyCredentials)
-	}
-
-	return NewProxyServerFromPort(appConfig.Port)
 }

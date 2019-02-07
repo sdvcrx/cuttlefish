@@ -28,7 +28,7 @@ func selectProxy(r *http.Request) (*url.URL, error) {
 	proxy := config.GetInstance().ParentProxies.Next()
 	if proxy != "" {
 		log.Printf("select proxy: %s", proxy)
-		// return url.Parse(proxy)
+		return url.Parse(proxy)
 	}
 	return nil, nil
 }

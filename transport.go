@@ -10,7 +10,7 @@ import (
 )
 
 var DefaultProxyTransport = &http.Transport{
-	Proxy: selectProxy,
+	Proxy: SelectProxy,
 	// Copy from https://golang.org/pkg/net/http/#RoundTripper
 	// http.DefaultTransport
 	DialContext: (&net.Dialer{
@@ -24,7 +24,7 @@ var DefaultProxyTransport = &http.Transport{
 	ExpectContinueTimeout: 1 * time.Second,
 }
 
-func selectProxy(r *http.Request) (*url.URL, error) {
+func SelectProxy(r *http.Request) (*url.URL, error) {
 	proxy := config.GetInstance().ParentProxies.Next()
 	if proxy != "" {
 		log.Printf("select proxy: %s", proxy)

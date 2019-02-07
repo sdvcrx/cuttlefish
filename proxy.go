@@ -8,6 +8,7 @@ import (
 	"net"
 	"net/http"
 	"spx/config"
+	"bufio"
 )
 
 
@@ -41,10 +42,46 @@ func filterProxyHeaders(header http.Header) {
 }
 
 func connectTunnelHandler(w http.ResponseWriter, r *http.Request) {
-	proxy_conn, err := net.DialTimeout("tcp4", r.Host, 10 * time.Second)
+	parentProxy, err := SelectProxy(r)
+
+	var proxy_conn net.Conn
+
+	if parentProxy != nil {
+		proxy_conn, err = net.DialTimeout("tcp4", parentProxy.Host, 10 * time.Second)
+		// TODO remove current unavailable proxy from proxies pool
+	} else {
+		proxy_conn, err = net.DialTimeout("tcp4", r.Host, 10 * time.Second)
+	}
+
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusServiceUnavailable)
 		return
+	}
+
+	// if parentProxy is not null, send CONNECT request to parent proxy server
+	if parentProxy != nil {
+		connectReq := &http.Request{
+			Method: http.MethodConnect,
+			URL: r.URL,
+			Host: r.Host,
+			Header: make(http.Header),
+		}
+		connectReq.Write(proxy_conn)
+		br := bufio.NewReader(proxy_conn)
+		resp, err := http.ReadResponse(br, connectReq)
+		if err != nil {
+			proxy_conn.Close()
+			http.Error(w, err.Error(), http.StatusServiceUnavailable)
+			return
+		}
+
+		// expect 200 Connection established
+		if resp.StatusCode != http.StatusOK {
+			proxy_conn.Close()
+			// TODO remove current unavailable proxy from proxies pool
+			http.Error(w, "Read Proxy Response error", http.StatusServiceUnavailable)
+			return
+		}
 	}
 
 	// Send 200 Connection established

@@ -60,6 +60,7 @@ func Load() {
 func init() {
 	// Bind pflag
 	pflag.IntP("port", "p", 8080, "Proxy server port")
+	pflag.BoolP("version", "v", false, "Show version number and quit")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 

@@ -2,7 +2,8 @@
 
 A simple HTTP forward proxy that support multiple parent proxies.
 
-
+[![Build Status](https://travis-ci.org/sdvcrx/spx.svg?branch=master)](https://travis-ci.org/sdvcrx/spx)
+[![Drone Build Status](https://drone.sdvcrx.com/api/badges/sdvcrx/spx/status.svg?branch=master)](https://drone.sdvcrx.com/sdvcrx/spx)
 
 ## Features
 

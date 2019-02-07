@@ -1,8 +1,8 @@
 package config
 
 import (
-	"time"
 	"math/rand"
+	"time"
 )
 
 type Iterator interface {
@@ -13,7 +13,7 @@ type Iterator interface {
 type ProxyIterator struct {
 	data []string
 	len  int
-	rd *rand.Rand
+	rd   *rand.Rand
 }
 
 func (iter ProxyIterator) Next() string {

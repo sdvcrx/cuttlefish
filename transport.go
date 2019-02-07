@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	"time"
 	"net"
-	"net/url"
 	"net/http"
+	"net/url"
 	"spx/config"
+	"time"
 )
 
 var DefaultProxyTransport = &http.Transport{

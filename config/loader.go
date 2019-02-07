@@ -1,21 +1,21 @@
 package config
 
 import (
-	"github.com/spf13/viper"
 	"github.com/spf13/pflag"
+	"github.com/spf13/viper"
 	"log"
 	"strings"
 )
 
 var (
 	configType = "toml"
-	config *AppConfig
+	config     *AppConfig
 )
 
 type AppConfig struct {
-	Port int
-	AuthUser string
-	AuthPassword string
+	Port          int
+	AuthUser      string
+	AuthPassword  string
 	ParentProxies Iterator
 }
 
@@ -44,15 +44,15 @@ func Load() {
 	proxies := viper.GetStringSlice("proxy.parent_proxies")
 	// Add http:// prefix
 	for idx, rule := range proxies {
-		if strings.HasPrefix(rule, "http") == false {
+		if !strings.HasPrefix(rule, "http") {
 			proxies[idx] = "http://" + rule
 		}
 	}
 
 	config = &AppConfig{
-		Port: viper.GetInt("common.port"),
-		AuthUser: viper.GetString("common.username"),
-		AuthPassword: viper.GetString("common.password"),
+		Port:          viper.GetInt("common.port"),
+		AuthUser:      viper.GetString("common.username"),
+		AuthPassword:  viper.GetString("common.password"),
 		ParentProxies: NewProxyIterator(proxies),
 	}
 }

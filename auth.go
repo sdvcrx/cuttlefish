@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"spx/utils"
+	"strings"
 )
 
 type BasicAuth struct {
-	username string
-	password string
-	credentials string
+	username          string
+	password          string
+	credentials       string
 	credentialsBase64 string
 }
 
@@ -19,7 +19,7 @@ func (auth BasicAuth) IsEmpty() bool {
 	return auth.username == "" && auth.password == ""
 }
 
-func (auth BasicAuth) Validate (authHeader string) bool {
+func (auth BasicAuth) Validate(authHeader string) bool {
 	if auth.IsEmpty() {
 		return true
 	}
@@ -48,7 +48,6 @@ func NewBasicAuth(username, password string) BasicAuth {
 	}
 }
 
-
 func ProxyAuthenticateHandler(handle http.HandlerFunc, authUser, authPassword string) http.Handler {
 	auth := NewBasicAuth(authUser, authPassword)
 
@@ -56,9 +55,9 @@ func ProxyAuthenticateHandler(handle http.HandlerFunc, authUser, authPassword st
 		return handle
 	}
 
-	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Need authorization
-		if auth.Validate(r.Header.Get("Proxy-Authorization")) == false {
+		if !auth.Validate(r.Header.Get("Proxy-Authorization")) {
 			w.Header().Set("Proxy-Authenticate", "Basic realm=\"Password\"")
 			http.Error(w, "", http.StatusProxyAuthRequired)
 			log.Println("Accessing proxy deny, password is wrong or empty")

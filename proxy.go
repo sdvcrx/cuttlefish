@@ -1,16 +1,15 @@
 package main
 
 import (
-	"log"
-	"io"
+	"bufio"
 	"fmt"
-	"time"
+	"io"
+	"log"
 	"net"
 	"net/http"
 	"spx/config"
-	"bufio"
+	"time"
 )
-
 
 var (
 	FILTER_HEADERS = []string{
@@ -47,10 +46,10 @@ func connectTunnelHandler(w http.ResponseWriter, r *http.Request) {
 	var proxy_conn net.Conn
 
 	if parentProxy != nil {
-		proxy_conn, err = net.DialTimeout("tcp4", parentProxy.Host, 10 * time.Second)
+		proxy_conn, err = net.DialTimeout("tcp4", parentProxy.Host, 10*time.Second)
 		// TODO remove current unavailable proxy from proxies pool
 	} else {
-		proxy_conn, err = net.DialTimeout("tcp4", r.Host, 10 * time.Second)
+		proxy_conn, err = net.DialTimeout("tcp4", r.Host, 10*time.Second)
 	}
 
 	if err != nil {
@@ -62,8 +61,8 @@ func connectTunnelHandler(w http.ResponseWriter, r *http.Request) {
 	if parentProxy != nil {
 		connectReq := &http.Request{
 			Method: http.MethodConnect,
-			URL: r.URL,
-			Host: r.Host,
+			URL:    r.URL,
+			Host:   r.Host,
 			Header: make(http.Header),
 		}
 		connectReq.Write(proxy_conn)
@@ -132,11 +131,10 @@ func NewProxyServer() http.Server {
 	authUser := appConfig.AuthUser
 	authPassword := appConfig.AuthPassword
 
-
 	addr := fmt.Sprintf(":%d", appConfig.Port)
 	proxyHandler := ProxyAuthenticateHandler(ProxyHandler, authUser, authPassword)
 	return http.Server{
-		Addr: addr,
+		Addr:    addr,
 		Handler: proxyHandler,
 	}
 }

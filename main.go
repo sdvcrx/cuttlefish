@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
+	"log"
 	"spx/config"
 )
 
 var (
 	version = "dev"
-	commit = "none"
-	date = "unknown"
+	commit  = "none"
+	date    = "unknown"
 )
 
 func main() {

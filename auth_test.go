@@ -1,11 +1,11 @@
 package main
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"spx/utils"
+	"testing"
 )
 
 func assertHTTPCode(t *testing.T, handler http.HandlerFunc, username, password string, expectedCode int) {
@@ -13,14 +13,14 @@ func assertHTTPCode(t *testing.T, handler http.HandlerFunc, username, password s
 	req, err := http.NewRequest("GET", "/", nil)
 	assert.Nil(t, err)
 	if username != "" && password != "" {
-		req.Header.Set("Proxy-Authorization", "Basic " + utils.Base64Encode(username + ":" + password))
+		req.Header.Set("Proxy-Authorization", "Basic "+utils.Base64Encode(username+":"+password))
 	}
 	handler(w, req)
 
 	assert.Equal(t, expectedCode, w.Code)
 }
 
-func handlerFunc (w http.ResponseWriter, r *http.Request) {
+func handlerFunc(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ok"))
 }
 

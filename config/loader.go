@@ -32,6 +32,12 @@ func LoadFromFile(fileName string) {
 	viper.SetConfigType(configType)
 	viper.SetConfigName(fileName)
 	viper.AddConfigPath(".")
+
+	configFilePath := viper.GetString("config")
+	if configFilePath != "" {
+		viper.SetConfigFile(configFilePath)
+	}
+
 	err := viper.ReadInConfig()
 	if err != nil {
 		log.Println("config file not found, using default config and args")
@@ -61,6 +67,7 @@ func init() {
 	// Bind pflag
 	pflag.IntP("port", "p", 8080, "Proxy server port")
 	pflag.BoolP("version", "v", false, "Show version number and quit")
+	pflag.StringP("config", "c", "", "Config file path")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)
 

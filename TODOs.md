@@ -2,7 +2,7 @@
 
 - [X] `CONNECT` tunnel support parent proxy
 - [X] Add Continuous Integration
-- [ ] Add goreleaser
+- [X] Add goreleaser
 
 ## v1.1
 

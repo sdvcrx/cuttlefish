@@ -1,5 +1,11 @@
 language: go
 
+addons:
+  apt:
+    packages:
+    # needed for the nfpm pipe:
+    - rpm
+
 go:
 - 1.11.x
 
@@ -10,3 +16,11 @@ script:
 - go mod download
 - go test ./...
 - go build .
+
+deploy:
+- provider: script
+  skip_cleanup: true
+  script: curl -sL https://git.io/goreleaser | bash
+  on:
+    tags: true
+    condition: $TRAVIS_OS_NAME = linux

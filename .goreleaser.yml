@@ -1,5 +1,5 @@
-# This is an example goreleaser.yaml file with some sane defaults.
 # Make sure to check the documentation at http://goreleaser.com
+project_name: cuttlefish
 before:
   hooks:
     - go mod download
@@ -7,6 +7,8 @@ builds:
 - env:
   - CGO_ENABLED=0
 archive:
+  files:
+    - config.toml.example
   replacements:
     darwin: Darwin
     linux: Linux
@@ -17,6 +19,10 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
+release:
+  github:
+    owner: sdvcrx
+    name: cuttlefish
 changelog:
   sort: asc
   filters:

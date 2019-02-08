@@ -12,6 +12,16 @@ A simple HTTP forward proxy that support multiple parent proxies.
 * Redirect request to multiple parent proxies (like squid)
 * toml configuration
 
+## Install
+
+Download binary file from [release](https://github.com/sdvcrx/cuttlefish/releases).
+
+Or compile it by yourself:
+
+``` shell
+go get github.com/sdvcrx/cuttlefish
+```
+
 ## TODO
 
 [TODOs.md](https://github.com/sdvcrx/cuttlefish/blob/master/TODOs.md)

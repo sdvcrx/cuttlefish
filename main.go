@@ -15,12 +15,12 @@ var (
 )
 
 func main() {
-	config.Load()
-
 	if viper.GetBool("version") {
 		fmt.Printf("%s %s %s\n", version, commit, date)
 		return
 	}
+
+	config.Load()
 
 	server := NewProxyServer()
 	log.Printf("Proxy server is listening on %s", server.Addr)

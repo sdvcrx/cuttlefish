@@ -3,11 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/sdvcrx/cuttlefish/config"
 	"io"
 	"log"
 	"net"
 	"net/http"
-	"spx/config"
 	"time"
 )
 

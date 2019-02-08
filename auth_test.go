@@ -1,10 +1,10 @@
 package main
 
 import (
+	"github.com/sdvcrx/cuttlefish/utils"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
-	"spx/utils"
 	"testing"
 )
 

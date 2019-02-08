@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/sdvcrx/cuttlefish/config"
 	"log"
 	"net"
 	"net/http"
 	"net/url"
-	"spx/config"
 	"time"
 )
 

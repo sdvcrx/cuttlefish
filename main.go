@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/sdvcrx/cuttlefish/config"
 	"github.com/spf13/viper"
 	"log"
-	"spx/config"
 )
 
 var (

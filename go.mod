@@ -1,4 +1,4 @@
-module spx
+module github.com/sdvcrx/cuttlefish
 
 require (
 	github.com/coreos/etcd v3.3.11+incompatible // indirect

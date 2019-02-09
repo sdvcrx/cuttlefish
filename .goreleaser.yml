@@ -3,9 +3,11 @@ project_name: cuttlefish
 before:
   hooks:
     - go mod download
+
 builds:
 - env:
   - CGO_ENABLED=0
+
 archive:
   files:
     - config.toml.example
@@ -15,14 +17,29 @@ archive:
     windows: Windows
     386: i386
     amd64: x86_64
+
+nfpm:
+  homepage: 'https://github.com/sdvcrx/cuttlefish'
+  maintainer: 'sdvcrx <me at sdvcrx.com>'
+  description: 'A simple HTTP Proxy support multiple parent proxies'
+  license: MIT
+  formats:
+    - deb
+    - rpm
+  bindir: /usr/bin
+  config_files:
+    "config.toml.example": "/etc/cuttlefish.toml.example"
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 release:
   github:
     owner: sdvcrx
     name: cuttlefish
+
 changelog:
   sort: asc
   filters:
@@ -30,3 +47,4 @@ changelog:
     - '^docs'
     - '^tests'
     - '^chore'
+    - '^style'

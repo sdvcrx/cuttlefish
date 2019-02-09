@@ -28,7 +28,7 @@ nfpm:
     - rpm
   bindir: /usr/bin
   config_files:
-    "config.toml.example": "/etc/cuttlefish.toml.example"
+    "config.toml.example": "/etc/cuttlefish/config.toml.example"
 
 checksum:
   name_template: 'checksums.txt'

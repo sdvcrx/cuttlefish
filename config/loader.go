@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
 	"log"
@@ -8,6 +9,7 @@ import (
 )
 
 var (
+	appName    = "cuttlefish"
 	configType = "toml"
 	config     *AppConfig
 )
@@ -32,6 +34,10 @@ func LoadFromString(config string) {
 func LoadFromFile(fileName string) {
 	viper.SetConfigType(configType)
 	viper.SetConfigName(fileName)
+	// => /etc/cuttlefish/config.toml
+	viper.AddConfigPath(fmt.Sprintf("/etc/%s/", appName))
+	// => /$HOME/.config/cuttlefish/config.toml
+	viper.AddConfigPath(fmt.Sprintf("/$HOME/.config/%s/", appName))
 	viper.AddConfigPath(".")
 
 	configFilePath := viper.GetString("config")

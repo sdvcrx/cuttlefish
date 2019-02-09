@@ -13,6 +13,7 @@ var (
 )
 
 type AppConfig struct {
+	Host          string
 	Port          int
 	AuthUser      string
 	AuthPassword  string
@@ -56,6 +57,7 @@ func Load() {
 	}
 
 	config = &AppConfig{
+		Host:          viper.GetString("common.host"),
 		Port:          viper.GetInt("common.port"),
 		AuthUser:      viper.GetString("common.username"),
 		AuthPassword:  viper.GetString("common.password"),
@@ -65,6 +67,7 @@ func Load() {
 
 func init() {
 	// Bind pflag
+	pflag.StringP("host", "H", "", "Proxy server host")
 	pflag.IntP("port", "p", 8080, "Proxy server port")
 	pflag.BoolP("version", "v", false, "Show version number and quit")
 	pflag.StringP("config", "c", "", "Config file path")
@@ -72,5 +75,6 @@ func init() {
 	viper.BindPFlags(pflag.CommandLine)
 
 	// Register alias
+	viper.RegisterAlias("common.host", "host")
 	viper.RegisterAlias("common.port", "port")
 }

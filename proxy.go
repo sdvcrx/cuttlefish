@@ -131,7 +131,7 @@ func NewProxyServer() http.Server {
 	authUser := appConfig.AuthUser
 	authPassword := appConfig.AuthPassword
 
-	addr := fmt.Sprintf(":%d", appConfig.Port)
+	addr := fmt.Sprintf("%s:%d", appConfig.Host, appConfig.Port)
 	proxyHandler := ProxyAuthenticateHandler(ProxyHandler, authUser, authPassword)
 	return http.Server{
 		Addr:    addr,

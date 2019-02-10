@@ -2,9 +2,9 @@ package config
 
 import (
 	"fmt"
+	"github.com/sdvcrx/cuttlefish/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
-	"log"
 	"strings"
 )
 
@@ -12,6 +12,7 @@ var (
 	appName    = "cuttlefish"
 	configType = "toml"
 	config     *AppConfig
+	logger     = log.Logger
 )
 
 type AppConfig struct {
@@ -47,7 +48,7 @@ func LoadFromFile(fileName string) {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		log.Println("config file not found, using default config and args")
+		logger.Warn().Msg("config file not found, using default config and args")
 	}
 }
 
@@ -75,7 +76,8 @@ func init() {
 	// Bind pflag
 	pflag.StringP("host", "H", "", "Proxy server host")
 	pflag.IntP("port", "p", 8080, "Proxy server port")
-	pflag.BoolP("version", "v", false, "Show version number and quit")
+	pflag.BoolP("version", "V", false, "Show version number and quit")
+	pflag.BoolP("verbose", "v", false, "Log more details")
 	pflag.StringP("config", "c", "", "Config file path")
 	pflag.Parse()
 	viper.BindPFlags(pflag.CommandLine)

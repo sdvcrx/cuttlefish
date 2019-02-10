@@ -3,6 +3,7 @@ module github.com/sdvcrx/cuttlefish
 require (
 	github.com/coreos/etcd v3.3.11+incompatible // indirect
 	github.com/pkg/errors v0.8.1
+	github.com/rs/zerolog v1.11.0
 	github.com/spf13/afero v1.2.0 // indirect
 	github.com/spf13/pflag v1.0.3
 	github.com/spf13/viper v1.3.1

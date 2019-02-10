@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/sdvcrx/cuttlefish/config"
 	"io"
-	"log"
 	"net"
 	"net/http"
 	"time"
@@ -119,10 +118,10 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 
 func ProxyHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodConnect {
-		log.Printf("%s %s", r.Method, r.Host)
+		logger.Info().Msgf("%s %s", r.Method, r.Host)
 		connectTunnelHandler(w, r)
 	} else {
-		log.Printf("%s %s", r.Method, r.URL)
+		logger.Info().Msgf("%s %s", r.Method, r.URL)
 		httpHandler(w, r)
 	}
 }

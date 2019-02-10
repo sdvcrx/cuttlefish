@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/sdvcrx/cuttlefish/config"
-	"log"
 	"net"
 	"net/http"
 	"net/url"
@@ -27,7 +26,7 @@ var DefaultProxyTransport = &http.Transport{
 func SelectProxy(r *http.Request) (*url.URL, error) {
 	proxy := config.GetInstance().ParentProxies.Next()
 	if proxy != "" {
-		log.Printf("select proxy: %s", proxy)
+		logger.Info().Msgf("select proxy: %s", proxy)
 		return url.Parse(proxy)
 	}
 	return nil, nil

@@ -4,14 +4,15 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/sdvcrx/cuttlefish/config"
+	"github.com/sdvcrx/cuttlefish/log"
 	"github.com/spf13/viper"
-	"log"
 )
 
 var (
 	version = "dev"
 	commit  = "none"
 	date    = "unknown"
+	logger  = log.Logger
 )
 
 func main() {
@@ -19,12 +20,13 @@ func main() {
 		fmt.Printf("%s %s %s\n", version, commit, date)
 		return
 	}
+	log.SetLevel(viper.GetBool("verbose"))
 
 	config.Load()
 
 	server := NewProxyServer()
-	log.Printf("Proxy server is listening on %s", server.Addr)
+	logger.Info().Msgf("Proxy server is listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil {
-		log.Fatalln(errors.Wrap(err, "server.ListenAndServe"))
+		logger.Fatal().Err(errors.Wrap(err, "server.ListenAndServe"))
 	}
 }

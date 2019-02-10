@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/sdvcrx/cuttlefish/utils"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -60,7 +59,7 @@ func ProxyAuthenticateHandler(handle http.HandlerFunc, authUser, authPassword st
 		if !auth.Validate(r.Header.Get("Proxy-Authorization")) {
 			w.Header().Set("Proxy-Authenticate", "Basic realm=\"Password\"")
 			http.Error(w, "", http.StatusProxyAuthRequired)
-			log.Println("Accessing proxy deny, password is wrong or empty")
+			logger.Error().Msgf("Accessing proxy deny, password is wrong or empty")
 			return
 		}
 		handle(w, r)

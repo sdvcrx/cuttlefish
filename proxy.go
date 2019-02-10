@@ -17,6 +17,7 @@ var (
 		"Proxy-Connection",
 		"Transfer-Encoding",
 		"Upgrade",
+		"X-Forwarded-For",
 	}
 )
 

@@ -7,10 +7,13 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"strings"
 	"time"
 )
 
 var (
+	INTERNAL_URL_PREFIX = "/-/"
+
 	FILTER_HEADERS = []string{
 		"Prxoy-Authenticate",
 		"Proxy-Connection",
@@ -116,7 +119,31 @@ func httpHandler(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, proxy_resp.Body)
 }
 
+// Handle internal proxy server commands
+func InternalHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(400)
+		return
+	}
+
+	switch command := strings.Trim(r.URL.Path, INTERNAL_URL_PREFIX); command {
+	case "reload":
+		config.Reload()
+	default:
+		logger.Warn().Msgf("[internal] No command available: %s", command)
+	}
+}
+
 func ProxyHandler(w http.ResponseWriter, r *http.Request) {
+	if strings.HasPrefix(r.URL.Path, INTERNAL_URL_PREFIX) {
+		InternalHandler(w, r)
+		return
+	}
+	if r.URL.Path == "/-/reload" {
+		config.Reload()
+		return
+	}
+
 	if r.Method == http.MethodConnect {
 		logger.Info().Msgf("%s %s", r.Method, r.Host)
 		connectTunnelHandler(w, r)

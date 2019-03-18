@@ -27,6 +27,6 @@ func main() {
 	server := NewProxyServer()
 	logger.Info().Msgf("Proxy server is listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil {
-		logger.Fatal().Err(errors.Wrap(err, "server.ListenAndServe"))
+		logger.Fatal().Err(errors.Wrap(err, "server.ListenAndServe")).Msg("Failed to start proxy server")
 	}
 }

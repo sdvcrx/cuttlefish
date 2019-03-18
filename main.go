@@ -24,6 +24,8 @@ func main() {
 
 	config.Load()
 
+	InitSignals()
+
 	server := NewProxyServer()
 	logger.Info().Msgf("Proxy server is listening on %s", server.Addr)
 	if err := server.ListenAndServe(); err != nil {

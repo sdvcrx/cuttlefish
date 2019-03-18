@@ -1,6 +1,7 @@
 ## TODO
 
 - [ ] Connection keep alive
+- [ ] Prometheus metrics
 
 ## v1.3
 
@@ -11,13 +12,14 @@
 ## v1.2
 
 - [ ] ACL support
+- [ ] Parent proxies authentication
 
 ## v1.1
 
 - [ ] Support HTTPS MITM proxy mode
 - [ ] Auto generate cert
-- [ ] Parent proxies authentication
-- [ ] Hot reload configuration
+- [ ] Read proxies from separate file
+- [x] Hot reload configuration
 
 ## v1.0
 

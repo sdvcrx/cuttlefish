@@ -72,6 +72,12 @@ func Load() {
 	}
 }
 
+func Reload() {
+	Load()
+
+	logger.Info().Msg("Reload proxy config success")
+}
+
 func init() {
 	// Bind pflag
 	pflag.StringP("host", "H", "", "Proxy server host")

@@ -18,7 +18,7 @@
 
 - [ ] Support HTTPS MITM proxy mode
 - [ ] Auto generate cert
-- [ ] Read proxies from separate file
+- [x] Read proxies from separate file
 - [x] Hot reload configuration
 
 ## v1.0

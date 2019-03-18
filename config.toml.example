@@ -5,4 +5,5 @@ username = ''
 password = ''
 
 [proxy]
+proxies_file = ''
 parent_proxies = []

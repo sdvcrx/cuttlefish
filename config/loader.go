@@ -1,10 +1,12 @@
 package config
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/sdvcrx/cuttlefish/log"
 	"github.com/spf13/pflag"
 	"github.com/spf13/viper"
+	"io/ioutil"
 	"strings"
 )
 
@@ -52,16 +54,51 @@ func LoadFromFile(fileName string) {
 	}
 }
 
-func Load() {
-	LoadFromFile("config")
+func formatProxyUrl(url string) string {
+	if !strings.Contains(url, "://") {
+		return "http://" + url
+	}
+	return url
+}
 
+func loadProxiesFromFile() []string {
+	proxies := []string{}
+	proxiesFilePath := viper.GetString("proxy.proxies_file")
+	if proxiesFilePath == "" {
+		return proxies
+	}
+
+	fileBytes, err := ioutil.ReadFile(proxiesFilePath)
+	if err != nil {
+		logger.Fatal().Err(err).Msgf("[config] Failed to load proxies_file: %s", proxiesFilePath)
+	}
+
+	scanner := bufio.NewScanner(strings.NewReader(string(fileBytes)))
+	for scanner.Scan() {
+		proxies = append(proxies, formatProxyUrl(scanner.Text()))
+	}
+	if err := scanner.Err(); err != nil {
+		logger.Fatal().Err(err).Msgf("[config] Failed to parse proxies_file: %s", proxiesFilePath)
+	}
+	return proxies
+}
+
+func loadProxies() []string {
 	proxies := viper.GetStringSlice("proxy.parent_proxies")
 	// Add http:// prefix
 	for idx, rule := range proxies {
-		if !strings.HasPrefix(rule, "http") {
-			proxies[idx] = "http://" + rule
-		}
+		proxies[idx] = formatProxyUrl(rule)
 	}
+
+	proxies = append(proxies, loadProxiesFromFile()...)
+
+	return proxies
+}
+
+func Load() {
+	LoadFromFile("config")
+
+	proxies := loadProxies()
 
 	config = &AppConfig{
 		Host:          viper.GetString("common.host"),
